@@ -49,6 +49,8 @@ Technical University Munich
 
 # References
 
-      Weissenow, K., Heinzinger, M., Rost, B.
-	  Protein language model embeddings for fast, accurate, alignment-free protein structure prediction
-      bioRxiv 2021.07.31.454572; doi: https://doi.org/10.1101/2021.07.31.454572
+Weissenow, K., Heinzinger, M., Rost, B.
+
+Protein language model embeddings for fast, accurate, and alignment-free protein structure prediction.
+
+Structure (2022) [link](https://pubmed.ncbi.nlm.nih.gov/35609601/)
