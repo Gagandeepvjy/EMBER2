@@ -7,12 +7,12 @@ input_csv="new.csv"  # Replace with your actual CSV file path
 mkdir -p output
 
 # Read the CSV file line by line, skipping the header
-tail -n +2 "$input_csv" | while IFS=',' read -r gene input_value; do
+tail -n +2 "$input_csv" | while IFS=',' read -r _ gene input_value; do
     # Debugging output
-    echo "Processing gene: $gene"
+    # echo "Processing gene: $gene"
 
     # Call the Python script with the extracted values
     python predict.py -i "$input_value" -o "output/$gene"
 
-    echo "Processing done gene: $gene"
+    # echo "Processing done gene: $gene"
 done
