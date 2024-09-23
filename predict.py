@@ -1,10 +1,3 @@
-
-##################################
-# EMBER2
-# Inference pipeline for 2D structure prediction using language models
-# Authors: Konstantin Weißenow, Michael Heinzinger
-##################################
-
 import argparse
 from pathlib import Path
 from math import log
@@ -19,11 +12,15 @@ import transformers
 import matplotlib.pyplot as plt
 
 from model import *
+import warnings
+
+warnings.filterwarnings("ignore")
 
 transformers.logging.set_verbosity_error()
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print("Using device: {}".format(device))
+
 
 
 class EmberDataset(torch.utils.data.Dataset):
@@ -203,7 +200,7 @@ def create_arg_parser():
     # Instantiate the parser
     parser = argparse.ArgumentParser(description=('t5_embedder.py creates T5 embeddings for a given text file containing sequence(s) in FASTA-format.') )
 
-    parser.add_argument( '-i', '--input', type=str, help='A path to a fasta-formatted text file containing protein sequence(s).')
+    parser.add_argument('-i', '--input_string', type=str, help='A string containing protein sequence(s) in FASTA-format.')
     parser.add_argument('--split_char', type=str, default=' ', help="The character for splitting the FASTA header in order to retrieve the protein identifier. Should be used in conjunction with --id. Default: ' '")
     parser.add_argument('--id', type=int, default=0, help="The index for the uniprot identifier field after splitting the FASTA header after each symbole in ['|', '#', ':', ' ']. Default: 0")
     parser.add_argument('-o', '--output', required=True, type=str, help="A path where predictions are stored")
@@ -226,8 +223,10 @@ def main():
         os.makedirs(args.output)
 
     # Read sequence(s)
-    # Directly assign the sequence as a string
-    sequence_input = "MADEDLIFRLEGVDGGQSPRAGHDGDSDGDSDDEEGYFICPITDDPSSNQNVNSKVNKYYSNLTKSERYSSSGSPANSFHFKEAWKHAIQKAKHMPDPWAEFHLEDIATERATRHRYNAVTGEWLDDEVLIKMASQPFGRGAMRECFRTKKLSNFLHAQQWKGASNYVAKRYIEPVDRDVYFEDVRLQMEAKLWGEEYNRHKPPKQVDIMQMCIIELKDRPGKPLFHLEHYIEGKYIKYNSNSGFVRDDNIRLTPQAFSHFTFERSGHQLIVVDIQGVGDLYTDPQIHTETGTDFGDGNLGVRGMALFFYSHACNRICESMGLAPFDLSPRERDAVNQNTKLLQSAKTILRGTEEKCGSPQVRTLSGSRPPLLRPLSENSGDENMSDVTFDSLPSSPSSATPHSQKLDHLHWPVFSDLDNMASRDHDHLDNHRESENSGDSGYPSEKRGELDDPEPREHGHSYSNRKYESDEDSLGSSGRVCVEKWNLLNSSRLHLPRASAVALEVQRLNALDLEKKIGKSILGKVHLAMVRYHEGGRFCEKGEEWDQESAVFHLEHAANLGELEAIVGLGLMYSQLPHHILADVSLKETEENKTKGFDYLLKAAEAGDRQSMILVARAFDSGQNLSPDRCQDWLEALHWYNTALEMTDCDEGGEYDGMQDEPRYMMLAREAEMLFTGGYGLEKDPQRSGDLYTQAAEAAMEAMKGRLANQYYQKAEEAWAQMEE"  # Replace with your sequence string
+    # seq_path   = Path( args.input )
+    # seq_dict = read_fasta(args.input, args.split_char, args.id)
+    # sequence_input = "MADEDLIFRLEGVDGGQSPRAGHDGDSDGDSDDEEGYFICPITDDPSSNQNVNSKVNKYYSNLTKSERYSSSGSPANSFHFKEAWKHAIQKAKHMPDPWAEFHLEDIATERATRHRYNAVTGEWLDDEVLIKMASQPFGRGAMRECFRTKKLSNFLHAQQWKGASNYVAKRYIEPVDRDVYFEDVRLQMEAKLWGEEYNRHKPPKQVDIMQMCIIELKDRPGKPLFHLEHYIEGKYIKYNSNSGFVRDDNIRLTPQAFSHFTFERSGHQLIVVDIQGVGDLYTDPQIHTETGTDFGDGNLGVRGMALFFYSHACNRICESMGLAPFDLSPRERDAVNQNTKLLQSAKTILRGTEEKCGSPQVRTLSGSRPPLLRPLSENSGDENMSDVTFDSLPSSPSSATPHSQKLDHLHWPVFSDLDNMASRDHDHLDNHRESENSGDSGYPSEKRGELDDPEPREHGHSYSNRKYESDEDSLGSSGRVCVEKWNLLNSSRLHLPRASAVALEVQRLNALDLEKKIGKSILGKVHLAMVRYHEGGRFCEKGEEWDQESAVFHLEHAANLGELEAIVGLGLMYSQLPHHILADVSLKETEENKTKGFDYLLKAAEAGDRQSMILVARAFDSGQNLSPDRCQDWLEALHWYNTALEMTDCDEGGEYDGMQDEPRYMMLAREAEMLFTGGYGLEKDPQRSGDLYTQAAEAAMEAMKGRLANQYYQKAEEAWAQMEE"  # Replace with your sequence string
+    sequence_input = args.input_string
     seq_dict = {"input_sequence":sequence_input}
 
     # Load models
