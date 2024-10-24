@@ -4,7 +4,7 @@ def get_args(params):
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("NPZ", type=str, help="input distograms and anglegrams (NN predictions)")
-    parser.add_argument("FASTA", type=str, help="input sequence")
+    # parser.add_argument("FASTA", type=str, help="input sequence")
     parser.add_argument("OUT", type=str, help="output model (in PDB format)")
 
     parser.add_argument('-cn', type=int, dest='decoys_per_pcut', default=10, help='number of coarse-grained structures to generate per p_cut threshold')
